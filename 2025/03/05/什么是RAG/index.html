@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Maple">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是 RAG？RAG（Retrieval Augmented Generation）是一种利用额外信息增强语言模型生成能力的技术。其工作流程如下：  切分：将大型文档分割成较小的部分。 向量化：将切分后的文本片段转换为向量表示。 检索：将输入查询与向量数据库中的向量进行匹配，找到最相似的文本片段。 生成：将检索到的相关信息与查询一起传递给大型语言模型（LLM），生成最终的响应。  RAG应用工作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是RAG">
+<meta property="og:url" content="http://mapleased.github.io/2025/03/05/%E4%BB%80%E4%B9%88%E6%98%AFRAG/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是 RAG？RAG（Retrieval Augmented Generation）是一种利用额外信息增强语言模型生成能力的技术。其工作流程如下：  切分：将大型文档分割成较小的部分。 向量化：将切分后的文本片段转换为向量表示。 检索：将输入查询与向量数据库中的向量进行匹配，找到最相似的文本片段。 生成：将检索到的相关信息与查询一起传递给大型语言模型（LLM），生成最终的响应。  RAG应用工作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/RAG%E5%BA%94%E7%94%A8%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/Document-Chunking.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/Chunking-Strategies-For-RAG.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E5%9B%BA%E5%AE%9A%E5%A4%A7%E5%B0%8F%E5%88%87%E5%88%86.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E8%AF%AD%E4%B9%89%E5%88%87%E5%88%86.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E8%AF%AD%E4%B9%89%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E9%80%92%E5%BD%92%E5%88%87%E5%88%86.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E9%80%92%E5%BD%92%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E5%9F%BA%E4%BA%8E%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%87%E5%88%86.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E5%9F%BA%E4%BA%8E%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg">
+<meta property="og:image" content="http://mapleased.github.io/img/rag/%E5%9F%BA%E4%BA%8ELLM%E7%9A%84%E5%88%87%E5%88%86.jpg">
+<meta property="article:published_time" content="2025-03-05T06:40:31.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:38:29.244Z">
+<meta property="article:author" content="Maple">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://mapleased.github.io/img/rag/RAG%E5%BA%94%E7%94%A8%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg">
+  
+  
+  
+  <title>什么是RAG - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mapleased.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Maple</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="什么是RAG"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-05 14:40" pubdate>
+          2025年3月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">什么是RAG</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="什么是-RAG？"><a href="#什么是-RAG？" class="headerlink" title="什么是 RAG？"></a>什么是 RAG？</h1><p>RAG（Retrieval Augmented Generation）是一种利用额外信息增强语言模型生成能力的技术。其工作流程如下：</p>
+<ol>
+<li><strong>切分</strong>：将大型文档分割成较小的部分。</li>
+<li><strong>向量化</strong>：将切分后的文本片段转换为向量表示。</li>
+<li><strong>检索</strong>：将输入查询与向量数据库中的向量进行匹配，找到最相似的文本片段。</li>
+<li><strong>生成</strong>：将检索到的相关信息与查询一起传递给大型语言模型（LLM），生成最终的响应。</li>
+</ol>
+<h2 id="RAG应用工作流程"><a href="#RAG应用工作流程" class="headerlink" title="RAG应用工作流程"></a>RAG应用工作流程</h2><p>以下是典型的RAG应用工作流程：</p>
+<p><img src="/img/rag/RAG%E5%BA%94%E7%94%A8%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="RAG应用工作流程（来自Avi Chawla）"></p>
+<p>RAG通过将额外信息存储为向量，将传入的查询与这些向量匹配，并将最相似的信息与查询一起传递给LLM。</p>
+<p>由于额外的文档可能非常大，第一步需要进行切分操作，将大文档分割成较小、易于管理的部分。这一步至关重要，确保文本能够适应嵌入模型的输入大小，提高检索步骤的效率和准确性，直接影响生成响应的质量。</p>
+<p>这一步至关重要，它确保文本能够适应嵌入模型的输入大小。此外，它提高了检索步骤的效率和准确性，这直接影响生成响应的质量。</p>
+<p><img src="/img/rag/Document-Chunking.jpg" srcset="/img/loading.gif" lazyload alt="RAG切分策略"></p>
+<h2 id="RAG的5种切分策略"><a href="#RAG的5种切分策略" class="headerlink" title="RAG的5种切分策略"></a>RAG的5种切分策略</h2><p><img src="/img/rag/Chunking-Strategies-For-RAG.jpg" srcset="/img/loading.gif" lazyload alt="RAG的五种切分策略"></p>
+<h3 id="01-固定大小切分"><a href="#01-固定大小切分" class="headerlink" title="01 固定大小切分"></a>01 固定大小切分</h3><p>最直观的切分方法是根据预定的字符数、单词数或Token数量将文本均匀分割成若干段落。</p>
+<p><img src="/img/rag/%E5%9B%BA%E5%AE%9A%E5%A4%A7%E5%B0%8F%E5%88%87%E5%88%86.jpg" srcset="/img/loading.gif" lazyload alt="固定大小切分"></p>
+<p>由于直接切分可能会破坏语义流畅性，建议在连续段落间保留一些重叠部分。这种方法易于实现，所有段落大小相同，有助于简化批处理。但它可能在句子或想法中途切分，导致重要信息分散在不同段落中。</p>
+<h3 id="02-语义切分"><a href="#02-语义切分" class="headerlink" title="02 语义切分"></a>02 语义切分</h3><p>根据句子、段落或主题部分等有意义的单元来切分文档。</p>
+<p><img src="/img/rag/%E8%AF%AD%E4%B9%89%E5%88%87%E5%88%86.jpg" srcset="/img/loading.gif" lazyload alt="语义切分"></p>
+<p>具体方法如下：</p>
+<ul>
+<li>根据句子、段落或主题部分等有意义的单元来切分文档。</li>
+<li>为每个段落生成嵌入。</li>
+<li>假设从第一个段落及其嵌入开始。</li>
+<li>如果第一个段落的嵌入与第二个段落的嵌入余弦相似度较高，则将两个段落组成一个切片。</li>
+<li>持续此过程，直到余弦相似度显著下降。</li>
+<li>一旦下降，开始一个新切片并重复此过程。</li>
+</ul>
+<p>输出可能如下所示：<br><img src="/img/rag/%E8%AF%AD%E4%B9%89%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg" srcset="/img/loading.gif" lazyload alt="语义切分结果"></p>
+<p>这种方式与固定大小切片不同，能够保持语言的自然流畅性，并保留完整的思想。</p>
+<p>由于每个切片语义更为丰富，它提高了检索准确度，进而使LLM生成的响应更加连贯且相关。</p>
+<p>一个小问题是，确定余弦相似度下降的阈值在不同文档间可能有所不同。</p>
+<h3 id="03-递归切分"><a href="#03-递归切分" class="headerlink" title="03 递归切分"></a>03 递归切分</h3><p>首先，基于内在的分隔符（如段落或章节）进行切分。</p>
+<p>然后，如果某个切片的大小超过预定义的切片大小限制，就将其进一步分割。如果切片符合大小限制，则不再进行切分。</p>
+<p><img src="/img/rag/%E9%80%92%E5%BD%92%E5%88%87%E5%88%86.jpg" srcset="/img/loading.gif" lazyload alt="递归切分"></p>
+<p>输出结果可能如下所示：<br><img src="/img/rag/%E9%80%92%E5%BD%92%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg" srcset="/img/loading.gif" lazyload alt="递归切分结果"></p>
+<p>如上所示：</p>
+<ul>
+<li><p>首先，我们定义了两个切片（紫色的两个段落）。</p>
+</li>
+<li><p>接下来，第1段被进一步分割成较小的切片。</p>
+</li>
+</ul>
+<p>与固定大小的切片不同，这种方法也保持了语言的自然流畅性，并保留了完整的思想。</p>
+<p>不过，在实现和计算复杂性方面有一些额外的开销。</p>
+<h3 id="04-基于文档结构的切分"><a href="#04-基于文档结构的切分" class="headerlink" title="04 基于文档结构的切分"></a>04 基于文档结构的切分</h3><p>这是一种直观的方法。</p>
+<p><img src="/img/rag/%E5%9F%BA%E4%BA%8E%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%87%E5%88%86.jpg" srcset="/img/loading.gif" lazyload alt="基于文档结构的切分"></p>
+<p>利用文档内在的结构（如标题、章节或段落）定义切片边界。</p>
+<p>这种方式能保持文档的结构完整性，确保切片与文档的逻辑部分对齐。</p>
+<p>该方法假设文档结构清晰，但这可能并非总是如此。此外，切片长度可能不同，甚至超过模型的Token限制。可以尝试与递归切分结合使用。</p>
+<p>输出结果可能如下所示：</p>
+<p><img src="/img/rag/%E5%9F%BA%E4%BA%8E%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%87%E5%88%86%E7%BB%93%E6%9E%9C.jpg" srcset="/img/loading.gif" lazyload alt="基于文档结构的切分结果"></p>
+<h3 id="05-基于LLM的切分"><a href="#05-基于LLM的切分" class="headerlink" title="05 基于LLM的切分"></a>05 基于LLM的切分</h3><p>LLM可以通过提示词生成语义隔离且有意义的切片。</p>
+<p><img src="/img/rag/%E5%9F%BA%E4%BA%8ELLM%E7%9A%84%E5%88%87%E5%88%86.jpg" srcset="/img/loading.gif" lazyload alt="基于LLM的切分"></p>
+<p>这种方法确保了高语义准确性，因为LLM能理解上下文和意义，远超简单的启发式方法。</p>
+<p>唯一的问题是，这种方式的计算成本是五种方法中最高的。</p>
+<p>此外，由于LLM通常有上下文窗口限制，需要对此加以处理。</p>
+<p>每种技术都有各自的优劣。语义切分在许多情况下效果不错，但仍需要测试。</p>
+<p>最终的选择将取决于内容的性质、嵌入模型的能力和计算资源等。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RAG/" class="print-no-link">#RAG</a>
+      
+        <a href="/tags/LLM/" class="print-no-link">#LLM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/06/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%80%89%E6%8B%A9AI%E6%99%BA%E8%83%BD%E5%AE%A2%E6%9C%8D/" title="为什么要选择AI智能客服">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">为什么要选择AI智能客服</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/05/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%B8%B8%E7%94%A8%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/" title="大模型的常用部署方式">
+                        <span class="hidden-mobile">大模型的常用部署方式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

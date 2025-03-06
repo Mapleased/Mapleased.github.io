@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Maple">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于如何使用SpringAI的思考根据一段时间对AI相关技术栈的研究，进行了一系列的技术选型，决定搭建一套AI应用技术解决方案。 一个优秀的技术解决方案，需要有易于变现的能力。谈论到AI，最先想到的都是聊天机器人和虚拟助手（如智能客服），需要检索产品信息和FAQ的场景，内容生成和总结类服务（法律医疗教育行业），企业内部知识库和客户关系管理（CRM）系统。那如何设计一个不依赖AI的技术解决方案呢？他">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI智能应用可以实用化到什么程度">
+<meta property="og:url" content="http://mapleased.github.io/2025/03/06/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAAI%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基于如何使用SpringAI的思考根据一段时间对AI相关技术栈的研究，进行了一系列的技术选型，决定搭建一套AI应用技术解决方案。 一个优秀的技术解决方案，需要有易于变现的能力。谈论到AI，最先想到的都是聊天机器人和虚拟助手（如智能客服），需要检索产品信息和FAQ的场景，内容生成和总结类服务（法律医疗教育行业），企业内部知识库和客户关系管理（CRM）系统。那如何设计一个不依赖AI的技术解决方案呢？他">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-06T03:29:19.000Z">
+<meta property="article:modified_time" content="2025-03-06T05:49:33.946Z">
+<meta property="article:author" content="Maple">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AI智能应用可以实用化到什么程度 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mapleased.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Maple</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI智能应用可以实用化到什么程度"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-06 11:29" pubdate>
+          2025年3月6日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI智能应用可以实用化到什么程度</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="基于如何使用SpringAI的思考"><a href="#基于如何使用SpringAI的思考" class="headerlink" title="基于如何使用SpringAI的思考"></a>基于如何使用SpringAI的思考</h1><p>根据一段时间对AI相关技术栈的研究，进行了一系列的技术选型，决定搭建一套AI应用技术解决方案。</p>
+<p>一个优秀的技术解决方案，需要有易于变现的能力。谈论到AI，最先想到的都是聊天机器人和虚拟助手（如智能客服），需要检索产品信息和FAQ的场景，内容生成和总结类服务（法律医疗教育行业），企业内部知识库和客户关系管理（CRM）系统。那如何设计一个不依赖AI的技术解决方案呢？他可以用于改变当前的开发模式，保证更高效的性能和更大的适用性。基于这个思考，那么我的AI服务必须满足以下所有条件：</p>
+<ul>
+<li>此方案不能局限于行业</li>
+<li>对比传统的开发编程具有优势性</li>
+<li>优化用户体验、提高业务办理效率</li>
+<li>具有智能化</li>
+</ul>
+<h3 id="举例一个最普适的场景，项目管理系统："><a href="#举例一个最普适的场景，项目管理系统：" class="headerlink" title="举例一个最普适的场景，项目管理系统："></a>举例一个最普适的场景，项目管理系统：</h3><h4 id="业务知识"><a href="#业务知识" class="headerlink" title="业务知识"></a>业务知识</h4><ul>
+<li>存在人员管理模块，部门管理模块，项目管理模块。</li>
+<li>人员与部门强相关。</li>
+<li>部门与项目强相关，项目只由指定的部门负责。（项目是部门人员接回来的）</li>
+<li>每个项目都由相关的人员负责（并非同个部门就需要处理所有该部门的项目）</li>
+<li>项目中存在项目人员中间表绑定人员与项目的关系，方便人员查看自己的项目</li>
+<li>当人员发生部门变更，则需要解除在原部门绑定的所有项目关联，重新绑定新的项目</li>
+</ul>
+<h4 id="补充提示词"><a href="#补充提示词" class="headerlink" title="补充提示词"></a>补充提示词</h4><ul>
+<li>当询问到变更部门相关信息时，请向用户确认用户的工号，需要变更的部门，变更后需要接收的项目</li>
+<li>当确认了用户的工号后，需要先查询客户的基本信息，变更前的部门，变更前负责的项目，变更后的部门，变更后需要负责的项目，并进行回显，要求用户确认变更</li>
+<li>当确认变更后，调用接口执行业务变更</li>
+<li>在确认变更阶段发生了补充信息，请重新查询新的信息返回并再次确认变更</li>
+<li>在业务处理时，需要先返回业务相关的核心信息，进行信息确认，确认后再执行</li>
+<li>人员的确认信息为 user.userNo(工号)、user.userName(用户名)</li>
+<li>部门的确认信息为 dept.id(部门ID)、dept.deptName(部门名称)</li>
+<li>项目的确认信息为 project.id(部门ID)、dept.projectName(部门名称)</li>
+<li>如果存在人员、项目或者部门同名的情况下，需要验证制ID</li>
+<li>确认信息时使用 user.userNo(工号)， 处理业务时查询出user.id(用户ID)用于业务流转</li>
+</ul>
+<hr>
+<h4 id="部门调动的交互方式（预实现的接口）"><a href="#部门调动的交互方式（预实现的接口）" class="headerlink" title="部门调动的交互方式（预实现的接口）"></a>部门调动的交互方式（预实现的接口）</h4><ul>
+<li>打开项目管理页面 </li>
+<li>根据用户查询该用户绑定的相关的项目列表 getProjectList(user.id)</li>
+<li>进入项目的管理页面 getProject(project.id)</li>
+<li>进入人员编辑页面 getUserByProjectId(project.id)</li>
+<li>移除该用户 delUserByProject(user.id, project.id)</li>
+<li>打开部门管理页面 getDept()</li>
+<li>在部门管理页面根据部门查询人员 getUserByDeptId(dept.id)</li>
+<li>部门管理页面将该人员移除 delUserByDept(user.id, dept.id)</li>
+<li>部门管理页面对新的部门添加该人员 addUserByDept(user.id, dept.id)</li>
+<li>打开项目管理页面 getProjectList(project.projectName)</li>
+<li>逐个点进该人员需要加入的项目 getProject(project.id)</li>
+<li>进入 项目的管理-人员编辑页面 getUserByProjectId(project.id)</li>
+<li>添加该用户 addUserByProject(user.id, project.id)</li>
+</ul>
+<h4 id="业务明知项分析"><a href="#业务明知项分析" class="headerlink" title="业务明知项分析"></a>业务明知项分析</h4><p>在这个过程中，系统操作人员需要明知的信息项：<br>需要被变更的人员的工号或ID (避免重名)<br>需要变更到的新部门ID<br>员工变更部门后需要加入的项目列表</p>
+<hr>
+<h4 id="SpringAI的应用"><a href="#SpringAI的应用" class="headerlink" title="SpringAI的应用"></a>SpringAI的应用</h4><p>此时我们可以简化这个流程，定义一个SpringAI监听器，同于监听以上的所有接口。<br>将<strong><strong>业务知识</strong></strong>和<strong><strong>补充提示词</strong></strong>作为该监听的提示词输入到模型中。<br>由前端开发会话窗口与后端监听器接口进行绑定。<br>由前端发起会话，SpringAI根据会话内容自动调用后端监听的接口列表实现业务。</p>
+<h4 id="SpringAI的执行流程"><a href="#SpringAI的执行流程" class="headerlink" title="SpringAI的执行流程"></a>SpringAI的执行流程</h4><p>向AI发出指令：部门变更</p>
+<p>AI或尝试询问需要变更的用户的工号，需要变更的部门，变更后需要接受的项目</p>
+<p>确认信息后，AI会查询相关信息并进行确认</p>
+<p>当信息不完全正确时，只需要补充待修改的部分，AI会根据需求进行确认信息修改并回显</p>
+<p>确认变更后AI会自动调用接口依次执行业务逻辑</p>
+<p>交互方式默认为对话框，可以优化为下拉框或按钮的联动</p>
+<p>在补充了监听器后，除了变更部门这种复杂业务，只要涉及到简单的CRUD，AI都能从会话框快速回答或者交互按钮，实现一个页面完成所有业务操作</p>
+<p>可以以联动数据表格的形式无跳转完成业务处理，也可以实现左侧嵌入式跳转变更表格信息</p>
+<h3 id="SpringAI做了什么？"><a href="#SpringAI做了什么？" class="headerlink" title="SpringAI做了什么？"></a>SpringAI做了什么？</h3><p>SpringAI只是优化了业务的交互流程，如果涉及到工作流和OA等需要严格按步骤执行的事务，只需要将必须严谨执行的流程投喂给AI，他就会在满足前置条件的前提下，帮你调用接口进行数据交互并完成业务办理。本质上，我们仍然需要编写基础的Java接口，并没有办法用SpringAI去替代Java的应用开发。</p>
+<h3 id="如何进一步优化"><a href="#如何进一步优化" class="headerlink" title="如何进一步优化"></a>如何进一步优化</h3><p>此时，应该已经了解了SpringAI可以用来做什么，能做到什么程度。那么，应该怎么将其实用化呢？<br>我们可以构建一个SpringAI工厂。<br>首先搭建一个可视化的SpringAI应用后台，用于维护SpringAI的事例监听器，现有的接口清单。</p>
+<ul>
+<li>指定一个监听器的权限命名 （用于前端对会话窗口进行绑定）</li>
+<li>配置该监听器相关的接口 （SpringAI 可以代为执行的接口清单）</li>
+<li>配置监听器的业务知识 （业务流程相关知识，仅用于参考）</li>
+<li>执行监听器时需要严格执行的提示词（配置必须匹配的规则）</li>
+<li>绑定外部知识引用模型或文件 （可选项，涉及到FQA业务时，补充RAG调用，减少模型的幻读）</li>
+</ul>
+<p>项目启动时，根据SpringAI进行自动化构建多个应用，进行执行。</p>
+<p>前段只需要根据监听器的权限命名，用于绑定不同的接口入口，即可 左侧图表右侧对话窗口 或者 完全对话 实现快捷业务办理。</p>
+<p>SpringAI支持纯会话办理业务，补充分屏仅为了提供优化确保流程正确。在配置了工作流的前提下，可以完全会话的形式办理业务，若不使用工作流，需要页面辅助以确保更方便更少的交互完成与AI的互动，可以确保在会话后是否完成即使变更再进行下一步操作。</p>
+<h3 id="结合RAG适用的应用场景："><a href="#结合RAG适用的应用场景：" class="headerlink" title="结合RAG适用的应用场景："></a>结合RAG适用的应用场景：</h3><p>SpringAI + RAG + 大模型的解决方案 是一种结合SpringAI框架、检索增强生成（RAG）技术和大型语言模型的系统，适合需要AI从外部知识源获取信息的Java应用程序。<br>以下是其主要适用场景：</p>
+<ul>
+<li>类似于智能客服，解决与人交互问题的<br>聊天机器人和虚拟助手：如客户支持系统或内部知识库，AI需要根据公司文档或用户数据提供回答。例如，电商网站上的自动客服机器人可以检索产品信息和FAQ来回答问题。</li>
+<li>内容生成和总结：<br>如根据最新数据生成新闻摘要或报告，AI可以从实时数据中提取信息，确保内容准确。</li>
+<li>数据分析和洞察：<br>如市场趋势分析或客户行为研究，AI通过检索相关数据集提供见解。</li>
+<li>合规性和监管应用：<br>如法律文档合规检查，AI可以检索最新法律法规，确保响应符合要求。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/04/10/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/" title="个人简历">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">个人简历</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/06/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%91%E5%B1%95%E4%B8%8E%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%9A%84%E5%85%B3%E7%B3%BB/" title="大模型的现状与提示词">
+                        <span class="hidden-mobile">大模型的现状与提示词</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
