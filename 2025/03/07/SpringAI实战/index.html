@@ -19,17 +19,20 @@
   <meta name="author" content="Maple">
   <meta name="keywords" content="">
   
-    <meta name="description" content="关键要点 SpringAI 似乎是一个简化 AI 集成到 Spring 应用程序的框架，研究表明它支持多种 AI 模型和向量数据库。 使用 IDEA 设置 SpringAI 应用可能需要添加特定依赖并配置 API 密钥，证据倾向于通过 Maven 或 Spring Initializr 完成。 SpringAI 常用的 API 包括 ChatClient 和 EmbeddingClient，研究显">
+    <meta name="description" content="SpringAI 实践详解本文旨在详细介绍 SpringAI 的实践，包括其概述、如何使用 IDEA 搭建应用、常用 API 以及方案落地实现。以下是基于当前可得信息的全面分析。 SpringAI 的背景与概述SpringAI 是一个由 Spring 框架支持的项目，旨在简化 AI 功能的开发，特别是在 Java 生态系统中。它受到 Python 项目如 LangChain 和 LlamaInde">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringAI实战">
 <meta property="og:url" content="http://mapleased.github.io/2025/03/07/SpringAI%E5%AE%9E%E6%88%98/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="关键要点 SpringAI 似乎是一个简化 AI 集成到 Spring 应用程序的框架，研究表明它支持多种 AI 模型和向量数据库。 使用 IDEA 设置 SpringAI 应用可能需要添加特定依赖并配置 API 密钥，证据倾向于通过 Maven 或 Spring Initializr 完成。 SpringAI 常用的 API 包括 ChatClient 和 EmbeddingClient，研究显">
+<meta property="og:description" content="SpringAI 实践详解本文旨在详细介绍 SpringAI 的实践，包括其概述、如何使用 IDEA 搭建应用、常用 API 以及方案落地实现。以下是基于当前可得信息的全面分析。 SpringAI 的背景与概述SpringAI 是一个由 Spring 框架支持的项目，旨在简化 AI 功能的开发，特别是在 Java 生态系统中。它受到 Python 项目如 LangChain 和 LlamaInde">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mapleased.github.io/img/spring-ai/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png">
 <meta property="article:published_time" content="2025-03-06T23:35:09.000Z">
-<meta property="article:modified_time" content="2025-03-06T23:35:38.152Z">
+<meta property="article:modified_time" content="2025-03-07T02:17:38.071Z">
 <meta property="article:author" content="Maple">
+<meta property="article:tag" content="SpringAI">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://mapleased.github.io/img/spring-ai/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png">
   
   
   
@@ -222,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          1.4k 字
         
       </span>
     
@@ -233,7 +236,7 @@
         
         
         
-          21 分钟
+          13 分钟
         
       </span>
     
@@ -275,40 +278,8 @@
             
               <div class="markdown-body">
                 
-                <h3 id="关键要点"><a href="#关键要点" class="headerlink" title="关键要点"></a>关键要点</h3><ul>
-<li>SpringAI 似乎是一个简化 AI 集成到 Spring 应用程序的框架，研究表明它支持多种 AI 模型和向量数据库。</li>
-<li>使用 IDEA 设置 SpringAI 应用可能需要添加特定依赖并配置 API 密钥，证据倾向于通过 Maven 或 Spring Initializr 完成。</li>
-<li>SpringAI 常用的 API 包括 ChatClient 和 EmbeddingClient，研究显示它们用于聊天和生成嵌入。</li>
-<li>实现解决方案可能涉及创建一个使用 ChatClient 的 REST 端点，证据显示这是一个常见实践。</li>
-</ul>
-<h3 id="SpringAI-概述"><a href="#SpringAI-概述" class="headerlink" title="SpringAI 概述"></a>SpringAI 概述</h3><p>SpringAI 是一个 Spring 框架的项目，旨在简化将人工智能功能集成到应用程序中的开发。它提供了一个便携的 API，支持多种 AI 模型提供商（如 OpenAI、Anthropic）和向量数据库提供商（如 PostgreSQL&#x2F;PGVector、Qdrant），使开发者可以轻松切换服务。它的目标是让 Java 开发者能够更高效地构建 AI 驱动的应用，例如文档问答或聊天功能。</p>
-<h3 id="如何使用-IDEA-搭建-SpringAI-应用"><a href="#如何使用-IDEA-搭建-SpringAI-应用" class="headerlink" title="如何使用 IDEA 搭建 SpringAI 应用"></a>如何使用 IDEA 搭建 SpringAI 应用</h3><p>要使用 IntelliJ IDEA（IDEA）搭建 SpringAI 应用，请按照以下步骤操作：</p>
-<ol>
-<li><strong>创建新项目</strong>：在 IDEA 中选择“File -&gt; New -&gt; Project”，选择“Spring Boot”项目类型，设置 Java 版本。</li>
-<li><strong>添加依赖</strong>：在 <code>pom.xml</code> 文件中添加 Spring AI BOM 和 <code>spring-ai-openai</code> 依赖：<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencyManagement</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-bom<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.0-M6<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>pom<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>import<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencyManagement</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-openai<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><strong>配置 API 密钥</strong>：在 <code>application.properties</code> 文件中设置 OpenAI API 密钥，例如：<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.ai.openai.api-key</span>=<span class="hljs-string">$&#123;OPENAI_API_KEY&#125;</span><br></code></pre></td></tr></table></figure>
-确保 API 密钥通过环境变量或属性文件提供。</li>
-<li><strong>定义客户端 Bean</strong>：在配置类中定义 <code>ChatClient</code> 等 Bean，例如：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppConfiguration</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> ChatClient <span class="hljs-title function_">chatClient</span><span class="hljs-params">(<span class="hljs-meta">@Value(&quot;$&#123;spring.ai.openai.api-key&#125;&quot;)</span> String apiKey)</span> &#123;<br>        <span class="hljs-keyword">return</span> ChatClient.ofOpenAi().apiKey(apiKey).build();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="SpringAI-常用的-API"><a href="#SpringAI-常用的-API" class="headerlink" title="SpringAI 常用的 API"></a>SpringAI 常用的 API</h3><p>SpringAI 提供了几个常用的 API，以下是两个主要示例：</p>
-<ol>
-<li><strong>ChatClient</strong>：用于与聊天模型交互，示例代码：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ChatClient</span> <span class="hljs-variable">chatClient</span> <span class="hljs-operator">=</span> ChatClient.ofOpenAi().apiKey(<span class="hljs-string">&quot;your_api_key&quot;</span>).build();<br><span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt(<span class="hljs-string">&quot;你好，你好吗？&quot;</span>).call().content();<br></code></pre></td></tr></table></figure>
-它支持同步和流式 API，适合构建聊天机器人。</li>
-<li><strong>EmbeddingClient</strong>：用于生成文本的嵌入，示例代码：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">EmbeddingClient</span> <span class="hljs-variable">embeddingClient</span> <span class="hljs-operator">=</span> EmbeddingClient.ofOpenAi().apiKey(<span class="hljs-string">&quot;your_api_key&quot;</span>).build();<br>List&lt;Embedding&gt; embeddings = embeddingClient.embed(<span class="hljs-string">&quot;示例文本&quot;</span>).call();<br></code></pre></td></tr></table></figure>
-嵌入可用于向量搜索或相似性比较。</li>
-<li><strong>VectorStore</strong>：管理向量数据库，简要示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">VectorStore</span> <span class="hljs-variable">vectorStore</span> <span class="hljs-operator">=</span> VectorStore.inMemory();<br>vectorStore.addDocuments(documents);<br>List&lt;Document&gt; results = vectorStore.similaritySearch(<span class="hljs-string">&quot;查询&quot;</span>, <span class="hljs-number">3</span>);<br></code></pre></td></tr></table></figure>
-它支持多种向量数据库，如 PostgreSQL&#x2F;PGVector 和 Qdrant。</li>
-</ol>
-<h3 id="如何实现方案落地"><a href="#如何实现方案落地" class="headerlink" title="如何实现方案落地"></a>如何实现方案落地</h3><p>让我们实现一个简单的解决方案：创建一个使用 <code>ChatClient</code> 的 REST 端点来回答问题。</p>
-<ol>
-<li><strong>定义 ChatClient Bean</strong>：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> ChatClient <span class="hljs-title function_">chatClient</span><span class="hljs-params">(<span class="hljs-meta">@Value(&quot;$&#123;spring.ai.openai.api-key&#125;&quot;)</span> String apiKey)</span> &#123;<br>    <span class="hljs-keyword">return</span> ChatClient.ofOpenAi().apiKey(apiKey).build();<br>&#125;<br></code></pre></td></tr></table></figure></li>
-<li><strong>创建 REST 控制器</strong>：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ChatController</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChatClient chatClient;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ChatController</span><span class="hljs-params">(ChatClient chatClient)</span> &#123;<br>        <span class="hljs-built_in">this</span>.chatClient = chatClient;<br>    &#125;<br>    <br>    <span class="hljs-meta">@GetMapping(&quot;/chat&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(<span class="hljs-meta">@RequestBody</span> String question)</span> &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt(question).call().content();<br>        <span class="hljs-keyword">return</span> response;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-<li><strong>运行应用</strong>：启动 Spring Boot 应用，然后通过 HTTP GET 请求访问 <code>/chat</code>，在请求体中提供问题，例如“今天天气如何？”。</li>
-</ol>
-<p>这个示例展示了如何将 SpringAI 集成到一个实际场景中，创建一个简单的 AI 驱动的问答接口。</p>
-<hr>
-<h3 id="调查笔记：SpringAI-实践详解"><a href="#调查笔记：SpringAI-实践详解" class="headerlink" title="调查笔记：SpringAI 实践详解"></a>调查笔记：SpringAI 实践详解</h3><p>本文旨在详细介绍 SpringAI 的实践，包括其概述、如何使用 IDEA 搭建应用、常用 API 以及方案落地实现。以下是基于当前可得信息的全面分析，时间为 2025 年 3 月 6 日下午 3:32 PST。</p>
-<h4 id="SpringAI-的背景与概述"><a href="#SpringAI-的背景与概述" class="headerlink" title="SpringAI 的背景与概述"></a>SpringAI 的背景与概述</h4><p>SpringAI 是一个由 Spring 框架支持的项目，旨在简化 AI 功能的开发，特别是在 Java 生态系统中。它受到 Python 项目如 LangChain 和 LlamaIndex 的启发，但不是直接移植，目标是让生成式 AI 应用不仅限于 Python 开发者，而是跨多种编程语言普及。研究表明，SpringAI 提供了一个便携的 API，支持聊天、文本生成图像和嵌入模型，同时兼容多个 AI 模型提供商（如 Anthropic、OpenAI、Microsoft）和 16 种向量数据库提供商（如 Apache Cassandra、PostgreSQL&#x2F;PGVector、Qdrant）。其核心目标是解决企业数据与 AI 模型连接的挑战，提供模块化设计和 POJO 构建块。</p>
+                <h1 id="SpringAI-实践详解"><a href="#SpringAI-实践详解" class="headerlink" title="SpringAI 实践详解"></a>SpringAI 实践详解</h1><p>本文旨在详细介绍 SpringAI 的实践，包括其概述、如何使用 IDEA 搭建应用、常用 API 以及方案落地实现。以下是基于当前可得信息的全面分析。</p>
+<h3 id="SpringAI-的背景与概述"><a href="#SpringAI-的背景与概述" class="headerlink" title="SpringAI 的背景与概述"></a>SpringAI 的背景与概述</h3><p>SpringAI 是一个由 Spring 框架支持的项目，旨在简化 AI 功能的开发，特别是在 Java 生态系统中。它受到 Python 项目如 LangChain 和 LlamaIndex 的启发，但不是直接移植，目标是让生成式 AI 应用不仅限于 Python 开发者，而是跨多种编程语言普及。研究表明，SpringAI 提供了一个便携的 API，支持聊天、文本生成图像和嵌入模型，同时兼容多个 AI 模型提供商（如 Anthropic、OpenAI、Microsoft、Amazon、Google、ollama）和 16 种向量数据库提供商（如 Apache Cassandra、PostgreSQL&#x2F;PGVector、Qdrant）。其核心目标是解决企业数据与 AI 模型连接的挑战，提供模块化设计和 POJO 构建块。</p>
 <p>从功能上看，SpringAI 支持以下关键特性：</p>
 <table>
 <thead>
@@ -339,86 +310,46 @@
 </tr>
 <tr>
 <td>学习资源</td>
-<td>概念概述 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/concepts.html">concepts.html</a>), 开始使用 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/get_started.html">getting-started.html</a>)</td>
+<td>概念概述 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/">Introduction :: Spring AI Reference</a>), 开始使用 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/getting-started.html">Getting Started :: Spring AI Reference</a>)</td>
 </tr>
 </tbody></table>
 <p>这些特性使 SpringAI 成为构建智能应用（如文档问答或聊天机器人）的强大工具，特别是在企业环境中。</p>
-<h4 id="使用-IDEA-搭建-SpringAI-应用"><a href="#使用-IDEA-搭建-SpringAI-应用" class="headerlink" title="使用 IDEA 搭建 SpringAI 应用"></a>使用 IDEA 搭建 SpringAI 应用</h4><p>要使用 IntelliJ IDEA 搭建 SpringAI 应用，需要以下步骤，基于官方文档和社区示例：</p>
+<h3 id="使用-IDEA-搭建-SpringAI-应用"><a href="#使用-IDEA-搭建-SpringAI-应用" class="headerlink" title="使用 IDEA 搭建 SpringAI 应用"></a>使用 IDEA 搭建 SpringAI 应用</h3><p>要使用 IntelliJ IDEA 搭建 SpringAI 应用，可以根据以下步骤：</p>
 <ol>
-<li><p><strong>创建新 Spring Boot 项目</strong>：</p>
-<ul>
-<li>在 IDEA 中选择“File -&gt; New -&gt; Project”，选择“Spring Boot”项目类型，设置 Java 版本（如 Java 21）。</li>
-<li>或者使用 Spring Initializr (<a target="_blank" rel="noopener" href="https://start.spring.io/">start.spring.io</a>) 生成项目，下载 ZIP 文件后导入 IDEA。</li>
+<li><strong>创建新 Spring Boot 项目</strong>：<ul>
+<li>在 IDEA 中选择“<strong>File</strong> -&gt; <strong>New</strong> -&gt; <strong>Project</strong>”，选择“<strong>Spring Boot</strong>”项目类型，设置 Java 版本（如 <strong>Java 21</strong>）。</li>
+<li>注意，基于兼容性的考虑，必须选择 <strong>17</strong> 以上的 <strong>JDK</strong> 和 <strong>3.0</strong> 以上版本的<strong>SpringBoot</strong>。</li>
 </ul>
 </li>
-<li><p><strong>添加依赖</strong>：</p>
-<ul>
-<li>在 <code>pom.xml</code> 文件中添加 Spring AI BOM 和 <code>spring-ai-openai</code> 依赖，确保版本一致。当前最新版本为 1.0.0-M6，示例配置如下：<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencyManagement</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-bom<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.0-M6<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>pom<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>import<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencyManagement</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-openai<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li>需要注意，早期文档中可能提到 <code>spring-ai-openai-springboot-starter</code>，但根据 GitHub 示例和 Maven Central，<code>spring-ai-openai</code> 是正确依赖。</li>
-</ul>
+</ol>
+<p>![项目创建](&#x2F;img&#x2F;spring-ai&#x2F;New Project.png)</p>
+<ol start="2">
+<li><p><strong>添加依赖</strong>：在 <code>pom.xml</code> 文件中添加 Spring AI BOM 和 <strong>选择需要接入的平台</strong> 依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">java.version</span>&gt;</span>17<span class="hljs-tag">&lt;/<span class="hljs-name">java.version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">spring-ai.version</span>&gt;</span>1.0.0-M6<span class="hljs-tag">&lt;/<span class="hljs-name">spring-ai.version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br>   <br><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 调用本地大模型 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-ollama-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 调用 OpenAI API --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-openai<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 调用 阿里云百炼 API --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.cloud.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-alibaba-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.0-M2.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br>   <br><span class="hljs-comment">&lt;!-- SpringAI 依赖管理 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependencyManagement</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.ai<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-ai-bom<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;spring-ai.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>pom<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>import<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencyManagement</span>&gt;</span><br></code></pre></td></tr></table></figure>
 </li>
-<li><p><strong>配置 API 密钥</strong>：</p>
-<ul>
-<li>从 AI 模型提供商（如 OpenAI）获取 API 密钥，格式为 <code>spring.ai.openai.api-key</code>。</li>
-<li>在 <code>application.properties</code> 文件中设置，例如：<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.ai.openai.api-key</span>=<span class="hljs-string">$&#123;OPENAI_API_KEY&#125;</span><br></code></pre></td></tr></table></figure></li>
-<li>或者通过环境变量设置 <code>OPENAI_API_KEY</code>，在 Windows 中通过系统属性配置。</li>
-</ul>
+<li><p><strong>配置 API 密钥</strong>：若使用了云平台 API ,则在 <code>application.properties</code> 文件中设置密钥，此处采取 阿里云百炼 API作为案例 ：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.ai.dashscope.api-key</span>=<span class="hljs-string">$&#123;OPENAI_API_KEY&#125;</span><br><span class="hljs-attr">spring.ai.dashscope.chat.options.model</span>=<span class="hljs-string">deepseek-r1</span><br></code></pre></td></tr></table></figure>
+<p>确保 API 密钥通过环境变量或属性文件提供。</p>
 </li>
 <li><p><strong>定义客户端 Bean</strong>：</p>
 <ul>
-<li>在配置类中定义 <code>ChatClient</code> 等 Bean，示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppConfiguration</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> ChatClient <span class="hljs-title function_">chatClient</span><span class="hljs-params">(<span class="hljs-meta">@Value(&quot;$&#123;spring.ai.openai.api-key&#125;&quot;)</span> String apiKey)</span> &#123;<br>        <span class="hljs-keyword">return</span> ChatClient.ofOpenAi().apiKey(apiKey).build();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>如何初始化 <code>ChatClient</code>进行服务调用：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AIChatBean</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChatClient chatClient;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">AIChatBean</span><span class="hljs-params">(ChatClient.Builder builder)</span> &#123;<br>        <span class="hljs-built_in">this</span>.chatClient = builder.build();<br>    &#125;<br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.chatClient.prompt()<br>                .user(message)<br>                .call()<br>                .content();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 <li>类似地，可以定义 <code>ImageClient</code> 和 <code>EmbeddingClient</code>。</li>
 </ul>
 </li>
 </ol>
-<p>这一过程确保了 SpringAI 应用的正确设置，特别是在 IDEA 环境中，开发者可以利用 IDE 的自动补全和调试功能。</p>
-<h4 id="SpringAI-常用-API-详解"><a href="#SpringAI-常用-API-详解" class="headerlink" title="SpringAI 常用 API 详解"></a>SpringAI 常用 API 详解</h4><p>SpringAI 提供了多个 API，以下是几个常用接口的详细说明：</p>
-<ol>
-<li><p><strong>ChatClient API</strong>：</p>
-<ul>
-<li>功能：用于与聊天模型交互，支持同步和流式 API，类似于 WebClient 和 RestClient 的流畅 API。</li>
-<li>使用示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ChatClient</span> <span class="hljs-variable">chatClient</span> <span class="hljs-operator">=</span> ChatClient.ofOpenAi().apiKey(<span class="hljs-string">&quot;your_api_key&quot;</span>).build();<br><span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt(<span class="hljs-string">&quot;你好，你好吗？&quot;</span>).call().content();<br>System.out.println(response);<br></code></pre></td></tr></table></figure></li>
-<li>它支持聊天对话记忆和 RAG（检索增强生成），适合构建问答系统或聊天机器人。</li>
-</ul>
-</li>
-<li><p><strong>EmbeddingClient API</strong>：</p>
-<ul>
-<li>功能：生成文本的嵌入，用于向量搜索或相似性比较。</li>
-<li>使用示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">EmbeddingClient</span> <span class="hljs-variable">embeddingClient</span> <span class="hljs-operator">=</span> EmbeddingClient.ofOpenAi().apiKey(<span class="hljs-string">&quot;your_api_key&quot;</span>).build();<br>List&lt;Embedding&gt; embeddings = embeddingClient.embed(<span class="hljs-string">&quot;示例文本&quot;</span>).call();<br></code></pre></td></tr></table></figure></li>
-<li>嵌入通常与向量数据库结合使用，增强搜索功能。</li>
-</ul>
-</li>
-<li><p><strong>VectorStore API</strong>：</p>
-<ul>
-<li>功能：管理向量数据库，支持多种提供商，如 PostgreSQL&#x2F;PGVector、Qdrant 等。</li>
-<li>使用示例：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">VectorStore</span> <span class="hljs-variable">vectorStore</span> <span class="hljs-operator">=</span> VectorStore.inMemory();<br>vectorStore.addDocuments(documents);<br>List&lt;Document&gt; results = vectorStore.similaritySearch(<span class="hljs-string">&quot;查询&quot;</span>, <span class="hljs-number">3</span>);<br></code></pre></td></tr></table></figure></li>
-<li>它提供便携式 API，包括 SQL 样式的元数据过滤，适合 RAG 场景。</li>
-</ul>
-</li>
-<li><p><strong>Advisors API</strong>：</p>
-<ul>
-<li>功能：封装生成式 AI 模式，转换数据并提供模型间的便携性。</li>
-<li>适合复杂场景，如多模型集成，但使用较少见于初学者。</li>
-</ul>
-</li>
-</ol>
-<p>这些 API 的设计体现了 SpringAI 的模块化原则，开发者可以根据需求选择合适的接口。</p>
-<h4 id="方案落地：实现一个问答-REST-端点"><a href="#方案落地：实现一个问答-REST-端点" class="headerlink" title="方案落地：实现一个问答 REST 端点"></a>方案落地：实现一个问答 REST 端点</h4><p>为了展示 SpringAI 的实际应用，我们实现一个简单的 REST 端点，使用 <code>ChatClient</code> 回答问题。以下是详细步骤：</p>
+<h3 id="方案落地：实现一个问答-REST-接口"><a href="#方案落地：实现一个问答-REST-接口" class="headerlink" title="方案落地：实现一个问答 REST 接口"></a>方案落地：实现一个问答 REST 接口</h3><p>为了展示 SpringAI 的实际应用，我们实现一个简单的 REST 接口，使用 <code>ChatClient</code> 回答问题。以下是详细步骤：</p>
 <ol>
 <li><p><strong>项目设置</strong>：</p>
 <ul>
 <li>确保已完成上述依赖和配置步骤，API 密钥已正确设置。</li>
 </ul>
 </li>
-<li><p><strong>定义 ChatClient Bean</strong>：</p>
-<ul>
-<li>在配置类中定义 Bean：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> ChatClient <span class="hljs-title function_">chatClient</span><span class="hljs-params">(<span class="hljs-meta">@Value(&quot;$&#123;spring.ai.openai.api-key&#125;&quot;)</span> String apiKey)</span> &#123;<br>    <span class="hljs-keyword">return</span> ChatClient.ofOpenAi().apiKey(apiKey).build();<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
+<li><p><strong>定义客户端 Bean</strong>：在配置类中定义 <code>AIChatService</code> 用于通过API连接到大模型，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.maple.springai.service;<br><br><span class="hljs-keyword">import</span> org.springframework.ai.chat.client.ChatClient;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Service;<br><br><span class="hljs-meta">@Service</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AIChatService</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChatClient chatClient;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">AIChatService</span><span class="hljs-params">(ChatClient.Builder builder)</span> &#123;<br>        <span class="hljs-built_in">this</span>.chatClient = builder.build();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.chatClient.prompt()<br>                .user(message)<br>                .call()<br>                .content();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 </li>
-<li><p><strong>创建 REST 控制器</strong>：</p>
-<ul>
-<li>编写控制器类，处理 HTTP 请求：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ChatController</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChatClient chatClient;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ChatController</span><span class="hljs-params">(ChatClient chatClient)</span> &#123;<br>        <span class="hljs-built_in">this</span>.chatClient = chatClient;<br>    &#125;<br>    <br>    <span class="hljs-meta">@GetMapping(&quot;/chat&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(<span class="hljs-meta">@RequestBody</span> String question)</span> &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt(question).call().content();<br>        <span class="hljs-keyword">return</span> response;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
+<li><p><strong>定义客户端 Bean</strong>：在配置类中定义 <code>AIChatController</code> 用于对外提供接口，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.maple.springai.controller;<br><br><span class="hljs-keyword">import</span> com.maple.springai.service.AIChatService;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.GetMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestParam;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br><br><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@RequestMapping(&quot;/ai&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AIChatController</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> AIChatService aiChatService;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">AIChatController</span><span class="hljs-params">(AIChatService aiChatService)</span> &#123;<br>        <span class="hljs-built_in">this</span>.aiChatService = aiChatService;<br>    &#125;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/chat&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String message)</span> &#123;<br>        <span class="hljs-keyword">return</span> aiChatService.chat(message);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>运行和测试</strong>：</p>
 <ul>
@@ -428,13 +359,15 @@
 </ul>
 </li>
 </ol>
-<p>这一示例展示了如何将 SpringAI 集成到一个实际场景中，适合初学者快速上手。更复杂的场景如 RAG（检索增强生成）可以参考官方文档 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/get_started.html">getting-started.html</a>) 和社区示例。</p>
-<h4 id="意外细节：版本与社区支持"><a href="#意外细节：版本与社区支持" class="headerlink" title="意外细节：版本与社区支持"></a>意外细节：版本与社区支持</h4><p>一个可能未预料到的细节是，SpringAI 目前仍处于开发阶段（如 1.0.0-M6），API 和使用方式可能在未来版本中变化。社区支持（如 GitHub 示例 <a target="_blank" rel="noopener" href="https://github.com/habuma/spring-ai-examples">spring-ai-examples</a>）提供了丰富的实践资源，开发者可以参考这些示例来了解更高级的使用场景。</p>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>通过上述步骤，开发者可以有效地实践 SpringAI，从设置项目到实现功能，逐步掌握其核心能力。建议参考官方文档和社区资源，确保跟上最新更新，特别是在 API 变化较大的开发阶段。</p>
+<p><img src="/img/spring-ai/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png" srcset="/img/loading.gif" lazyload alt="根据Swagger调用接口示例"></p>
+<p>这一示例展示了如何将 SpringAI 集成到一个实际场景中，适合初学者快速上手。更复杂的场景如 RAG（检索增强生成）可以参考官方文档 (<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/getting-started.html">Getting Started :: Spring AI Reference</a>) 和社区示例。</p>
+<h3 id="意外细节：版本与社区支持"><a href="#意外细节：版本与社区支持" class="headerlink" title="意外细节：版本与社区支持"></a>意外细节：版本与社区支持</h3><p>一个可能未预料到的细节是，SpringAI 目前仍处于开发阶段（如 1.0.0-M6），API 和使用方式可能在未来版本中变化。社区支持（如 GitHub 示例 <a target="_blank" rel="noopener" href="https://github.com/habuma/spring-ai-examples">spring-ai-examples</a>）提供了丰富的实践资源，开发者可以参考这些示例来了解更高级的使用场景。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>通过上述步骤，开发者可以有效地实践 SpringAI，从设置项目到实现功能，逐步掌握其核心能力。建议参考官方文档和社区资源，确保跟上最新更新，特别是在 API 变化较大的开发阶段。</p>
 <h3 id="关键引文"><a href="#关键引文" class="headerlink" title="关键引文"></a>关键引文</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/">Spring AI Reference Introduction</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-ai">Spring AI GitHub Repository</a></li>
-<li><a target="_blank" rel="noopener" href="https://howtodoinjava.com/spring-ai/getting-started/">Getting Started with Spring AI Examples</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/">Introduction :: Spring AI Reference</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-ai/reference/getting-started.html">Getting Started :: Spring AI Reference</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-ai">GitHub - spring-projects&#x2F;spring-ai: An Application Framework for AI Engineering</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/alibaba/spring-ai-alibaba">GitHub - alibaba&#x2F;spring-ai-alibaba: An Application Framework for Java Developers</a></li>
 </ul>
 
                 
@@ -444,6 +377,13 @@
             <div>
               <div class="post-metas my-3">
   
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SpringAI/" class="print-no-link">#SpringAI</a>
+      
+    </div>
   
 </div>
 
@@ -455,9 +395,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/04/10/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/" title="个人简历">
+                      <a href="/2025/03/07/%E5%9F%BA%E4%BA%8ESpringAI%E7%9A%84%E4%BD%BF%E7%94%A8%E7%BB%86%E8%8A%82/" title="基于 SpringAI 的使用细节">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">个人简历</span>
+                        <span class="hidden-mobile">基于 SpringAI 的使用细节</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -465,7 +405,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/03/06/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAAI%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8/" title="AI智能应用可以实用化到什么程度">
+                      <a href="/2025/03/06/AI%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%94%A8%E5%8C%96%E5%88%B0%E4%BB%80%E4%B9%88%E7%A8%8B%E5%BA%A6/" title="AI智能应用可以实用化到什么程度">
                         <span class="hidden-mobile">AI智能应用可以实用化到什么程度</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
