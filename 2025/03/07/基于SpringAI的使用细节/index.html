@@ -19,13 +19,15 @@
   <meta name="author" content="Maple">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="基于 SpringAI 的使用细节本文旨在详细记录 SpringAI 在实践过程中遇到的一些常见问题  在开发的过程中是否会存在疑问, prompt、user、system 都能传入 message, 那这些消息入口有什么区别呢ChatClient 的基本调用 基于 ChatClient的服务调用：12345678910111213@Beanpublic class AIChatBean &amp;#12">
+<meta property="og:type" content="article">
 <meta property="og:title" content="基于 SpringAI 的使用细节">
 <meta property="og:url" content="http://mapleased.github.io/2025/03/07/%E5%9F%BA%E4%BA%8ESpringAI%E7%9A%84%E4%BD%BF%E7%94%A8%E7%BB%86%E8%8A%82/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基于 SpringAI 的使用细节本文旨在详细记录 SpringAI 在实践过程中遇到的一些常见问题  在开发的过程中是否会存在疑问, prompt、user、system 都能传入 message, 那这些消息入口有什么区别呢ChatClient 的基本调用 基于 ChatClient的服务调用：12345678910111213@Beanpublic class AIChatBean &amp;#12">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-07T02:20:59.000Z">
-<meta property="article:modified_time" content="2025-03-07T02:21:34.059Z">
+<meta property="article:modified_time" content="2025-03-14T01:22:05.731Z">
 <meta property="article:author" content="Maple">
 <meta property="article:tag" content="SpringAI">
 <meta name="twitter:card" content="summary_large_image">
@@ -221,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          708 字
         
       </span>
     
@@ -232,7 +234,7 @@
         
         
         
-          1 分钟
+          6 分钟
         
       </span>
     
@@ -274,7 +276,33 @@
             
               <div class="markdown-body">
                 
-                <h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+                <h1 id="基于-SpringAI-的使用细节"><a href="#基于-SpringAI-的使用细节" class="headerlink" title="基于 SpringAI 的使用细节"></a>基于 SpringAI 的使用细节</h1><p>本文旨在详细记录 SpringAI 在实践过程中遇到的一些常见问题</p>
+<hr>
+<h2 id="在开发的过程中是否会存在疑问-prompt、user、system-都能传入-message-那这些消息入口有什么区别呢"><a href="#在开发的过程中是否会存在疑问-prompt、user、system-都能传入-message-那这些消息入口有什么区别呢" class="headerlink" title="在开发的过程中是否会存在疑问, prompt、user、system 都能传入 message, 那这些消息入口有什么区别呢"></a>在开发的过程中是否会存在疑问, <code>prompt</code>、<code>user</code>、<code>system</code> 都能传入 <code>message</code>, 那这些消息入口有什么区别呢</h2><h3 id="ChatClient-的基本调用"><a href="#ChatClient-的基本调用" class="headerlink" title="ChatClient 的基本调用"></a>ChatClient 的基本调用</h3><ul>
+<li>基于 <code>ChatClient</code>的服务调用：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AIChatBean</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChatClient chatClient;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">AIChatBean</span><span class="hljs-params">(ChatClient.Builder builder)</span> &#123;<br>        <span class="hljs-built_in">this</span>.chatClient = builder.build();<br>    &#125;<br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">chat</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.chatClient.prompt()<br>                .user(message)<br>                .call()<br>                .content();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>在使用 Spring AI 的 <code>ChatClient</code> 时，我们可以通过链式调用来构建提示（Prompt），例如：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt()<br>    .system(<span class="hljs-string">&quot;你是一名专业的旅游顾问，专门提供旅游建议和信息。&quot;</span>)<br>    .user(<span class="hljs-string">&quot;请问夏季去巴黎旅游有哪些推荐的景点？&quot;</span>)<br>    .call()<br>    .content();<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中：</p>
+<ul>
+<li><code>.system(&quot;你是一名专业的旅游顾问，专门提供旅游建议和信息。&quot;)</code>：设置系统消息，定义 AI 模型的角色和行为。</li>
+<li><code>.user(&quot;请问夏季去广东旅游有哪些推荐的景点？&quot;)</code>：设置用户消息，提出具体的问题。</li>
+</ul>
+<p><strong>关于在 <code>.prompt()</code> 中补充信息的考虑：</strong></p>
+<p><code>.prompt()</code> 方法用于初始化一个新的提示构建器。在某些情况下，您可能希望在初始化提示时就设置一些默认信息，尤其是涉及到系统需要强制性要求设定一些规则的场景。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> chatClient.prompt(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Prompt</span>(<span class="hljs-string">&quot;当为客户办理预定相关业务时，需要先向客户确认需要预定的客房信息与用户信息是否准确。&quot;</span>))<br>    .system(<span class="hljs-string">&quot;你是一名酒店客服，需要处理客户的客房查询、客房预定、取消预定、出行建议等业务。&quot;</span>)<br>    .user(<span class="hljs-string">&quot;我想要入住你们的酒店，今天还有大床房吗？&quot;</span>)<br>    .call()<br>    .content();<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，<strong>new Prompt(“当为客户办理预定相关业务时，需要先向客户确认需要预定的客房信息与用户信息是否准确。”)</strong> 为提示添加了一个初始消息，指导 AI 按指定的规则来回答问题。这种方式可以为 AI 模型提供更明确的指示，可能会得到更符合预期的响应。</p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>使用 <code>.system()</code> 方法可以设定 AI 模型的角色和行为，帮助引导模型的回答方向。</li>
+<li>使用 <code>.user()</code> 方法输入用户的具体问题或请求。</li>
+<li>在 <code>.prompt()</code> 中添加初始信息，可以为整个对话提供上下文或指导，可能有助于获得更精确的回答。同时也可以加入一些需要强制执行的规则，满足指定的条件后再与后端指定的事务接口进行联动。</li>
+</ul>
+<p>根据具体需求，您可以灵活地组合这些方法，以构建有效的提示，获取满意的 AI 响应。 </p>
+<hr>
+
                 
               </div>
             
